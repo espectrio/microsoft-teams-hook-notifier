@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\Component\Notifier\Bridge\Slack;
+namespace Espectrio\MicrosoftTeamsHookNotifier;
 
 use Symfony\Component\Notifier\Exception\LogicException;
 use Symfony\Component\Notifier\Exception\TransportException;
@@ -20,13 +20,11 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
- * @author Fabien Potencier <fabien@symfony.com>
+ * @author Dmitry Pigin <me.dotty@gmail.com>
  *
  * @internal
- *
- * @experimental in 5.0
  */
-final class SlackTransport extends AbstractTransport
+final class MicrosoftTeamsHookTransport extends AbstractTransport
 {
     protected const HOST = 'slack.com';
 
@@ -49,7 +47,7 @@ final class SlackTransport extends AbstractTransport
 
     public function supports(MessageInterface $message): bool
     {
-        return $message instanceof ChatMessage && (null === $message->getOptions() || $message->getOptions() instanceof SlackOptions);
+        return $message instanceof ChatMessage && (null === $message->getOptions() || $message->getOptions() instanceof MicrosoftTeamsHookOptions);
     }
 
     /**
@@ -60,12 +58,12 @@ final class SlackTransport extends AbstractTransport
         if (!$message instanceof ChatMessage) {
             throw new LogicException(sprintf('The "%s" transport only supports instances of "%s" (instance of "%s" given).', __CLASS__, ChatMessage::class, \get_class($message)));
         }
-        if ($message->getOptions() && !$message->getOptions() instanceof SlackOptions) {
-            throw new LogicException(sprintf('The "%s" transport only supports instances of "%s" for options.', __CLASS__, SlackOptions::class));
+        if ($message->getOptions() && !$message->getOptions() instanceof MicrosoftTeamsHookOptions) {
+            throw new LogicException(sprintf('The "%s" transport only supports instances of "%s" for options.', __CLASS__, MicrosoftTeamsHookOptions::class));
         }
 
         if (!($opts = $message->getOptions()) && $notification = $message->getNotification()) {
-            $opts = SlackOptions::fromNotification($notification);
+            $opts = MicrosoftTeamsHookOptions::fromNotification($notification);
         }
 
         $options = $opts ? $opts->toArray() : [];

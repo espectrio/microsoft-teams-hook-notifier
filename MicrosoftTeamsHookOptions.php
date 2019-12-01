@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\Component\Notifier\Bridge\Slack;
+namespace Espectrio\MicrosoftTeamsHookNotifier;
 
 use Symfony\Component\Notifier\Bridge\Slack\Block\SlackBlockInterface;
 use Symfony\Component\Notifier\Bridge\Slack\Block\SlackDividerBlock;
@@ -18,11 +18,9 @@ use Symfony\Component\Notifier\Message\MessageOptionsInterface;
 use Symfony\Component\Notifier\Notification\Notification;
 
 /**
- * @author Fabien Potencier <fabien@symfony.com>
- *
- * @experimental in 5.0
+ * @author Dmitry Pigin <me.dotty@gmail.com>
  */
-final class SlackOptions implements MessageOptionsInterface
+final class MicrosoftTeamsHookOptions implements MessageOptionsInterface
 {
     private $options = [];
 

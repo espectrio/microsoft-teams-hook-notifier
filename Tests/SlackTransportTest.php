@@ -13,8 +13,8 @@ namespace Symfony\Component\Notifier\Bridge\Slack\Tests;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
-use Symfony\Component\Notifier\Bridge\Slack\SlackOptions;
-use Symfony\Component\Notifier\Bridge\Slack\SlackTransport;
+use Symfony\Component\Notifier\Bridge\Slack\MicrosoftTeamsHookOptions;
+use Symfony\Component\Notifier\Bridge\Slack\MicrosoftTeamsHookTransport;
 use Symfony\Component\Notifier\Exception\LogicException;
 use Symfony\Component\Notifier\Exception\TransportException;
 use Symfony\Component\Notifier\Message\ChatMessage;
@@ -32,7 +32,7 @@ final class SlackTransportTest extends TestCase
         $host = 'testHost';
         $channel = 'testChannel';
 
-        $transport = new SlackTransport('testToken', $channel, $this->createMock(HttpClientInterface::class));
+        $transport = new MicrosoftTeamsHookTransport('testToken', $channel, $this->createMock(HttpClientInterface::class));
         $transport->setHost('testHost');
 
         $this->assertSame(sprintf('slack://%s?channel=%s', $host, $channel), (string) $transport);
@@ -40,7 +40,7 @@ final class SlackTransportTest extends TestCase
 
     public function testSupportsChatMessage(): void
     {
-        $transport = new SlackTransport('testToken', 'testChannel', $this->createMock(HttpClientInterface::class));
+        $transport = new MicrosoftTeamsHookTransport('testToken', 'testChannel', $this->createMock(HttpClientInterface::class));
 
         $this->assertTrue($transport->supports(new ChatMessage('testChatMessage')));
         $this->assertFalse($transport->supports($this->createMock(MessageInterface::class)));
@@ -50,7 +50,7 @@ final class SlackTransportTest extends TestCase
     {
         $this->expectException(LogicException::class);
 
-        $transport = new SlackTransport('testToken', 'testChannel', $this->createMock(HttpClientInterface::class));
+        $transport = new MicrosoftTeamsHookTransport('testToken', 'testChannel', $this->createMock(HttpClientInterface::class));
 
         $transport->send($this->createMock(MessageInterface::class));
     }
@@ -71,7 +71,7 @@ final class SlackTransportTest extends TestCase
             return $response;
         });
 
-        $transport = new SlackTransport('testToken', 'testChannel', $client);
+        $transport = new MicrosoftTeamsHookTransport('testToken', 'testChannel', $client);
 
         $transport->send(new ChatMessage('testMessage'));
     }
@@ -94,7 +94,7 @@ final class SlackTransportTest extends TestCase
             return $response;
         });
 
-        $transport = new SlackTransport('testToken', 'testChannel', $client);
+        $transport = new MicrosoftTeamsHookTransport('testToken', 'testChannel', $client);
 
         $transport->send(new ChatMessage('testMessage'));
     }
@@ -123,7 +123,7 @@ final class SlackTransportTest extends TestCase
             return $response;
         });
 
-        $transport = new SlackTransport($token, $channel, $client);
+        $transport = new MicrosoftTeamsHookTransport($token, $channel, $client);
 
         $transport->send(new ChatMessage('testMessage'));
     }
@@ -146,7 +146,7 @@ final class SlackTransportTest extends TestCase
 
         $notification = new Notification($message);
         $chatMessage = ChatMessage::fromNotification($notification, new Recipient('test-email@example.com'));
-        $options = SlackOptions::fromNotification($notification);
+        $options = MicrosoftTeamsHookOptions::fromNotification($notification);
 
         $expectedBody = http_build_query([
             'blocks' => $options->toArray()['blocks'],
@@ -161,7 +161,7 @@ final class SlackTransportTest extends TestCase
             return $response;
         });
 
-        $transport = new SlackTransport($token, $channel, $client);
+        $transport = new MicrosoftTeamsHookTransport($token, $channel, $client);
 
         $transport->send($chatMessage);
     }
@@ -174,7 +174,7 @@ final class SlackTransportTest extends TestCase
             return $this->createMock(ResponseInterface::class);
         });
 
-        $transport = new SlackTransport('testToken', 'testChannel', $client);
+        $transport = new MicrosoftTeamsHookTransport('testToken', 'testChannel', $client);
 
         $transport->send(new ChatMessage('testMessage', $this->createMock(MessageOptionsInterface::class)));
     }
@@ -205,7 +205,7 @@ final class SlackTransportTest extends TestCase
             return $response;
         });
 
-        $transport = new SlackTransport($token, $channel, $client);
+        $transport = new MicrosoftTeamsHookTransport($token, $channel, $client);
 
         $transport->send(new ChatMessage('testMessage'));
     }

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\Component\Notifier\Bridge\Slack;
+namespace Espectrio\MicrosoftTeamsHookNotifier;
 
 use Symfony\Component\Notifier\Exception\UnsupportedSchemeException;
 use Symfony\Component\Notifier\Transport\AbstractTransportFactory;
@@ -17,11 +17,9 @@ use Symfony\Component\Notifier\Transport\Dsn;
 use Symfony\Component\Notifier\Transport\TransportInterface;
 
 /**
- * @author Fabien Potencier <fabien@symfony.com>
- *
- * @experimental in 5.0
+ * @author Dmitry Pigin <me.dotty@gmail.com>
  */
-final class SlackTransportFactory extends AbstractTransportFactory
+final class MicrosoftTeamsHookTransportFactory extends AbstractTransportFactory
 {
     public function create(Dsn $dsn): TransportInterface
     {
@@ -31,15 +29,15 @@ final class SlackTransportFactory extends AbstractTransportFactory
         $host = 'default' === $dsn->getHost() ? null : $dsn->getHost();
         $port = $dsn->getPort();
 
-        if ('slack' === $scheme) {
-            return (new SlackTransport($accessToken, $channel, $this->client, $this->dispatcher))->setHost($host)->setPort($port);
+        if ('teams' === $scheme) {
+            return (new MicrosoftTeamsHookTransport($accessToken, $channel, $this->client, $this->dispatcher))->setHost($host)->setPort($port);
         }
 
-        throw new UnsupportedSchemeException($dsn, 'slack', $this->getSupportedSchemes());
+        throw new UnsupportedSchemeException($dsn, 'teams', $this->getSupportedSchemes());
     }
 
     protected function getSupportedSchemes(): array
     {
-        return ['slack'];
+        return ['teams'];
     }
 }

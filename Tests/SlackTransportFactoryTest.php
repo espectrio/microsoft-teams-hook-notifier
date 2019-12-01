@@ -12,7 +12,7 @@
 namespace Symfony\Component\Notifier\Bridge\Slack\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Notifier\Bridge\Slack\SlackTransportFactory;
+use Symfony\Component\Notifier\Bridge\Slack\MicrosoftTeamsHookTransportFactory;
 use Symfony\Component\Notifier\Exception\IncompleteDsnException;
 use Symfony\Component\Notifier\Exception\UnsupportedSchemeException;
 use Symfony\Component\Notifier\Transport\Dsn;
@@ -21,7 +21,7 @@ final class SlackTransportFactoryTest extends TestCase
 {
     public function testCreateWithDsn(): void
     {
-        $factory = new SlackTransportFactory();
+        $factory = new MicrosoftTeamsHookTransportFactory();
 
         $host = 'testHost';
         $channel = 'testChannel';
@@ -32,7 +32,7 @@ final class SlackTransportFactoryTest extends TestCase
 
     public function testCreateWithNoTokenThrowsMalformed(): void
     {
-        $factory = new SlackTransportFactory();
+        $factory = new MicrosoftTeamsHookTransportFactory();
 
         $this->expectException(IncompleteDsnException::class);
         $factory->create(Dsn::fromString(sprintf('slack://%s/?channel=%s', 'testHost', 'testChannel')));
@@ -40,7 +40,7 @@ final class SlackTransportFactoryTest extends TestCase
 
     public function testSupportsSlackScheme(): void
     {
-        $factory = new SlackTransportFactory();
+        $factory = new MicrosoftTeamsHookTransportFactory();
 
         $this->assertTrue($factory->supports(Dsn::fromString('slack://host/?channel=testChannel')));
         $this->assertFalse($factory->supports(Dsn::fromString('somethingElse://host/?channel=testChannel')));
@@ -48,7 +48,7 @@ final class SlackTransportFactoryTest extends TestCase
 
     public function testNonSlackSchemeThrows(): void
     {
-        $factory = new SlackTransportFactory();
+        $factory = new MicrosoftTeamsHookTransportFactory();
 
         $this->expectException(UnsupportedSchemeException::class);
 

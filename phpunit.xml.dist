@@ -13,7 +13,7 @@
     </php>
 
     <testsuites>
-        <testsuite name="Symfony Slack Notifier Bridge Test Suite">
+        <testsuite name="Symfony Microsoft Teams Hook Notifier Bridge Test Suite">
             <directory>./Tests/</directory>
         </testsuite>
     </testsuites>
