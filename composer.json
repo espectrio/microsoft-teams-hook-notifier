@@ -27,7 +27,7 @@
     "extra": {
         "patches": {
             "symfony/notifier": {
-                "Add possibility to extract path from provided DSN": "./Added_path_available_in_DSN.patch"
+                "Add possibility to extract path from provided DSN": "https://raw.githubusercontent.com/espectrio/microsoft-teams-hook-notifier/master/Added_path_available_in_DSN.patch"
             }
         }
     }
