@@ -24,13 +24,11 @@ final class MicrosoftTeamsHookTransportFactory extends AbstractTransportFactory
     public function create(Dsn $dsn): TransportInterface
     {
         $scheme = $dsn->getScheme();
-        $accessToken = $this->getUser($dsn);
-        $channel = $dsn->getOption('channel');
-        $host = 'default' === $dsn->getHost() ? null : $dsn->getHost();
-        $port = $dsn->getPort();
+        $host = $dsn->getHost();
+        $webhookPath = $dsn->getPath();
 
         if ('teams' === $scheme) {
-            return (new MicrosoftTeamsHookTransport($accessToken, $channel, $this->client, $this->dispatcher))->setHost($host)->setPort($port);
+            return (new MicrosoftTeamsHookTransport($webhookPath, $this->client, $this->dispatcher))->setHost($host);
         }
 
         throw new UnsupportedSchemeException($dsn, 'teams', $this->getSupportedSchemes());

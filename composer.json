@@ -23,5 +23,12 @@
         "exclude-from-classmap": [
             "/Tests/"
         ]
+    },
+    "extra": {
+        "patches": {
+            "symfony/notifier": {
+                "Add possibility to extract path from provided DSN": "./Added_path_available_in_DSN.patch"
+            }
+        }
     }
 }

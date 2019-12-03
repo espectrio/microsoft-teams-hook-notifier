@@ -26,15 +26,11 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  */
 final class MicrosoftTeamsHookTransport extends AbstractTransport
 {
-    protected const HOST = 'slack.com';
+    protected const HOST = 'outlook.office.com';
 
-    private $accessToken;
-    private $chatChannel;
-
-    public function __construct(string $accessToken, string $chatChannel = null, HttpClientInterface $client = null, EventDispatcherInterface $dispatcher = null)
+    public function __construct(string $webhookPath = null, HttpClientInterface $client = null, EventDispatcherInterface $dispatcher = null)
     {
-        $this->accessToken = $accessToken;
-        $this->chatChannel = $chatChannel;
+        $this->webhookPath = $webhookPath;
         $this->client = $client;
 
         parent::__construct($client, $dispatcher);
@@ -42,7 +38,7 @@ final class MicrosoftTeamsHookTransport extends AbstractTransport
 
     public function __toString(): string
     {
-        return sprintf('slack://%s?channel=%s', $this->getEndpoint(), $this->chatChannel);
+        return sprintf('teams://%s/%s', $this->getEndpoint(), $this->webhookPath);
     }
 
     public function supports(MessageInterface $message): bool
@@ -72,17 +68,17 @@ final class MicrosoftTeamsHookTransport extends AbstractTransport
             $options['channel'] = $message->getRecipientId() ?: $this->chatChannel;
         }
         $options['text'] = $message->getSubject();
-        $response = $this->client->request('POST', 'https://'.$this->getEndpoint().'/api/chat.postMessage', [
+        $response = $this->client->request('POST', 'https://'.$this->getEndpoint().$this->webhookPath, [
             'body' => array_filter($options),
         ]);
 
         if (200 !== $response->getStatusCode()) {
-            throw new TransportException(sprintf('Unable to post the Slack message: %s.', $response->getContent(false)), $response);
+            throw new TransportException(sprintf('Unable to post the Teams message: %s.', $response->getContent(false)), $response);
         }
 
         $result = $response->toArray(false);
         if (!$result['ok']) {
-            throw new TransportException(sprintf('Unable to post the Slack message: %s.', $result['error']), $response);
+            throw new TransportException(sprintf('Unable to post the Teams message: %s.', $result['error']), $response);
         }
     }
 }
